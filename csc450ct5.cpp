@@ -1,4 +1,5 @@
-// Project for CSC450
+// CSC450 Module 5:  User Input Program
+//
 // Append user input to a file, and then, for some reason, 
 // write a reversed copy of the file to a new file.
 
@@ -9,22 +10,24 @@
 using namespace std; 
 
 
-void appendStringToFile(const string &filename, const string &data) {
+bool appendStringToFile(const string &filename, const string &data) {
 	ofstream outFile(filename, ios::app); // open in append mode
 	if (!outFile) {
 		cerr << "Error opening file for writing." << endl;
-		return;
+		return false;
 	}
 	outFile << data << endl;
 	outFile.close();
+	
+	return true;
 }
 
 // Save a reversed copy of a given file
-void saveReversedFile(const string &originalFile, const string &reversedFile) {
+bool saveReversedFile(const string &originalFile, const string &reversedFile) {
 	ifstream inFile(originalFile);
 	if (!inFile) {
 		cerr << "Error opening original file for reading." << endl;
-		return;
+		return false;
 	}
 
 	// Read the entire thing into one string
@@ -41,7 +44,7 @@ void saveReversedFile(const string &originalFile, const string &reversedFile) {
 	ofstream outFile(reversedFile);
 	if (!outFile) {
 		cerr << "Error opening reversed file for writing." << endl;
-		return;
+		return false;
 	}
 
 	// Reverse the string
@@ -54,11 +57,16 @@ void saveReversedFile(const string &originalFile, const string &reversedFile) {
 
 	// Close the output file
 	outFile.close();
+	
+	return true;
 }
 
 
 int main(int argc, char **argv) {
 
+	const string INPUT_FILE_NAME = "CSC450_CT5_mod5.txt";
+	const string REVERSED_OUTPUT_FILE_NAME = "CSC450-mod5-reverse.txt";
+	
 	// Get input from the user 
 	cout << "Enter a string: ";
 	string input;
@@ -67,14 +75,16 @@ int main(int argc, char **argv) {
 	// Save it to the file (in append mode)
 	// This path is relative to the current working directory,
 	// not necessarily the executable. 
-	appendStringToFile("CSC450_CT5_mod5.txt", input);
+	appendStringToFile(INPUT_FILE_NAME, input);
 	cout << "Data appended to CSC450_CT5_mod5.txt." << endl;
-
-	cout << "Now we are going to reverse the contents of the file and save it to CSC450-mod5-reverse.txt" << endl;
-
+	
 	// Reverse the file and save it to a new file
-	// (This requires re-reading it, but who cares)
-	saveReversedFile("CSC450_CT5_mod5.txt", "CSC450-mod5-reverse.txt");
+	// (This requires re-reading it, but should be OK for our purposes here)
+	
+	cout << "Now we are going to reverse the contents of the file and save it." << endl;
 
+	saveReversedFile(INPUT_FILE_NAME, REVERSED_OUTPUT_FILE_NAME);
+
+	cout << "Saved to " << REVERSED_OUTPUT_FILE_NAME << endl;
 	return 0;
 }
